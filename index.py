@@ -1,16 +1,14 @@
-from web3 import Web3
-import codecs
+from fastapi import FastAPI
+from routes.user import user 
+app = FastAPI()
+app.include_router(user)
 
-print("Strating Script")
-my_provider = Web3.HTTPProvider('https://polygon-rpc.com')
-w3 = Web3(my_provider)
-# print(w3.eth.get_block('latest'))
-receipt = w3.eth.get_transaction_receipt(
-    "0xfed967fb2040275bbdcf9b0df0ced470018ef3f2506752be46a6d5b55cce5425")
-print(receipt.blockHash.hex())
-print(receipt.blockNumber)
-print(receipt.contractAddress)
-print(receipt)
-# for i in receipt.logs[1].topics:
-# 	print(i.hex()) 
+
+# import requests
+# api_url = "https://api.etherscan.io/api?module=account&action=txlist&address=0xfb626333099a91ab677bcd5e9c71bc4dbe0238a8&startblock=0&endblock=99999999&page=1&offset=10000&sort=asc&apikey=G21V6SUX1MX9HFBG7ZIBJAMXQ2F58ZBSER"
+# response = requests.get(api_url)
+# print(response.json())
+
+
+
 
