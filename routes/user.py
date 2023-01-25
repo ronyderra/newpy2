@@ -13,6 +13,10 @@ def getHash(n):
 
 @user.get('/trx/{address}')
 async def getUser(address):
+    user = serializeList(conn.MakerDao.users.find({"userAddress": address}))
+    if user:
+        print("no need")
+        return user[0]
     trxs = userTrxs(address)
     filtered = [e for e in trxs if e['from'] == address]
     userTrxsField = []
@@ -30,7 +34,10 @@ async def getUser(address):
         "userAddress": address,
         "trxs": userTrxsField[:10]
     })
-    return userTrxsField
+    return {
+        "userAddress": address,
+        "trxs": userTrxsField[:10]
+    }
 
 
 @user.get('/user/{address}')
