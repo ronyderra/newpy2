@@ -11,7 +11,7 @@ def getHash(n):
     return n["hash"]
 
 
-@user.get('/trx/{address}')
+@user.post('/trx/{address}')
 async def getUser(address):
     trxs = userTrxs(address)
     filtered = [e for e in trxs if e['from'] == address]
@@ -20,6 +20,7 @@ async def getUser(address):
     for item in filtered:
         destAddress = item["to"]
         if destAddress in duprray:
+            print("included allready")
             continue
         duprray.append(destAddress)
         destAddressTrxs = [e for e in filtered if e['to'] == destAddress]
@@ -30,3 +31,8 @@ async def getUser(address):
         "trxs": userTrxsField
     })
     return userTrxsField
+
+
+@user.get('/user/{address}')
+async def findUser(address):
+    return serializeList(conn.MakerDao.users.find({"userAddress": address}))
