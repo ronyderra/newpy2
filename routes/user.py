@@ -11,7 +11,7 @@ def getHash(n):
     return n["hash"]
 
 
-@user.post('/trx/{address}')
+@user.get('/trx/{address}')
 async def getUser(address):
     trxs = userTrxs(address)
     filtered = [e for e in trxs if e['from'] == address]
@@ -28,11 +28,12 @@ async def getUser(address):
         userTrxsField.append({"destAddress": destAddress, "hashes": hashes})
     conn.MakerDao.users.insert_one({
         "userAddress": address,
-        "trxs": userTrxsField
+        "trxs": userTrxsField[:10]
     })
     return userTrxsField
 
 
 @user.get('/user/{address}')
 async def findUser(address):
-    return serializeList(conn.MakerDao.users.find({"userAddress": address}))
+    user = serializeList(conn.MakerDao.users.find({"userAddress": address}))
+    return user[0]
