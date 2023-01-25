@@ -30,15 +30,9 @@ async def getUser(address):
         userTrxsField.append({"destAddress": destAddress, "hashes": hashes})
     conn.MakerDao.users.insert_one({
         "userAddress": address,
-        "trxs": userTrxsField[:10]
+        "trxs": userTrxsField[0:10]
     })
     return {
         "userAddress": address,
-        "trxs": userTrxsField[:10]
+        "trxs": userTrxsField[0:10]
     }
-
-
-@user.get('/user/{address}')
-async def findUser(address):
-    user = serializeList(conn.MakerDao.users.find({"userAddress": address}))
-    return user[0]

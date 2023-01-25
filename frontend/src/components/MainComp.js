@@ -11,20 +11,7 @@ export default function MainComp() {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
 
-  const handleSearch = async () => {
-    try {
-      setLoading(true);
-      const resp = await axios.get(`http://127.0.0.1:8000/user/${input}`);
-      setUserAddress(resp.data.userAddress);
-      setCurretProj(resp.data.trxs);
-      setLoading(false);
-    } catch (error) {
-      console.log(error.message);
-      setLoading(false);
-    }
-  };
-
-  const handleLink = async (address) => {
+  const handleSearch = async (address) => {
     try {
       setLoading(true);
       const resp = await axios.get(`http://127.0.0.1:8000/trxs/${address}`);
@@ -47,7 +34,7 @@ export default function MainComp() {
           <h1>Explore Your Trxs</h1>
           <input value={input} onChange={(e) => setInput(e.target.value)}></input>
           <h3>{userAddress}</h3>
-          <button onClick={handleSearch}>Search</button>
+          <button onClick={() => handleSearch(input)}>Search</button>
           <table id="customers">
             <thead>
               <tr>
@@ -63,7 +50,7 @@ export default function MainComp() {
                     currentProj.map((i, index) => (
                       <tr key={i.destAddress}>
                         <td>
-                          <button onClick={() => handleLink(i.destAddress)}>
+                          <button onClick={() => handleSearch(i.destAddress)}>
                             search node
                             {" " + i.destAddress.slice(0, 5) + "..." + i.destAddress.slice(-5)}
                           </button>
