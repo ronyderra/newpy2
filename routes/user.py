@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from models.user import USER
 from config.db import conn
 from schemas.user import serializeList
-from bson import ObjectId
 import userTrxs
 user = APIRouter()
 
