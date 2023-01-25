@@ -8,6 +8,7 @@ export default function MainComp() {
   const [userAddress, setUserAddress] = React.useState("");
   const [currentProj, setCurretProj] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [count, setCount] = React.useState(0);
 
   const handleSearch = async () => {
     try {
@@ -29,12 +30,13 @@ export default function MainComp() {
       setUserAddress(resp.data.userAddress);
       setCurretProj(resp.data.trxs);
       setLoading(false);
+      setCount(count + 1);
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  React.useEffect(() => {}, [currentProj, loading]);
+  React.useEffect(() => {}, [currentProj, loading, count]);
 
   return (
     <React.Fragment>
@@ -53,34 +55,44 @@ export default function MainComp() {
               </tr>
             </thead>
             <tbody>
-              {!loading ? (
-                currentProj ? (
-                  currentProj.map((i, index) => (
-                    <tr key={i.destAddress}>
-                      <td>
-                        <button onClick={() => handleLink(i.destAddress)}>
-                          search node
-                          {" " + i.destAddress.slice(0, 5) + "..." + i.destAddress.slice(-5)}
-                        </button>
-                      </td>
-                      <td>{i.hashes.length}</td>
-                      <td>
-                        {i.hashes.slice(0, 5).map((hash) => (
-                          <div key={hash} className="parent">
-                            <div>{hash.slice(0, 5) + "..." + hash.slice(-5)}</div>
-                          </div>
-                        ))}
-                      </td>
-                    </tr>
-                  ))
+              {count < 4 ? (
+                !loading ? (
+                  currentProj ? (
+                    currentProj.map((i, index) => (
+                      <tr key={i.destAddress}>
+                        <td>
+                          <button onClick={() => handleLink(i.destAddress)}>
+                            search node
+                            {" " + i.destAddress.slice(0, 5) + "..." + i.destAddress.slice(-5)}
+                          </button>
+                        </td>
+                        <td>{i.hashes.length}</td>
+                        <td>
+                          {i.hashes.slice(0, 5).map((hash) => (
+                            <div key={hash} className="parent">
+                              <div>{hash.slice(0, 5) + "..." + hash.slice(-5)}</div>
+                            </div>
+                          ))}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr></tr>
+                  )
                 ) : (
-                  <tr></tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <h1>loading....</h1>
+                    </td>
+                    <td></td>
+                  </tr>
                 )
               ) : (
                 <tr>
                   <td></td>
                   <td>
-                    <h1>loading....</h1>
+                    <h2>Max depth is 3 , search from beginning</h2>
                   </td>
                   <td></td>
                 </tr>
