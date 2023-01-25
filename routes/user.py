@@ -9,14 +9,14 @@ user = APIRouter()
 def getHash(n):
     return n["hash"]
 
-@user.get('/trx/{address}')
+@user.get('/trxs/{address}')
 async def getUser(address):
     user = serializeList(conn.MakerDao.users.find({"userAddress": address}))
     if user:
         print("no need")
         return user[0]
     trxs = userTrxs(address)
-    filtered = [e for e in trxs if e['from'] == address]
+    filtered = [e for e in trxs if e['from'].upper() == address.upper()]
     userTrxsField = []
     duprray = []
     for item in filtered:

@@ -1,14 +1,15 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import "./mainComp.css";
 
 export default function MainComp() {
-  const [input, setInput] = React.useState("0xfb626333099a91ab677bcd5e9c71bc4dbe0238a8");
-  const [userAddress, setUserAddress] = React.useState("");
-  const [currentProj, setCurretProj] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
-  const [count, setCount] = React.useState(0);
+  const [input, setInput] = useState();
+  const [userAddress, setUserAddress] = useState("");
+  const [currentProj, setCurretProj] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
 
   const handleSearch = async () => {
     try {
@@ -19,24 +20,25 @@ export default function MainComp() {
       setLoading(false);
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
   const handleLink = async (address) => {
     try {
-      console.log({ address });
       setLoading(true);
-      const resp = await axios.get(`http://127.0.0.1:8000/trx/${address}`);
+      const resp = await axios.get(`http://127.0.0.1:8000/trxs/${address}`);
       setUserAddress(resp.data.userAddress);
       setCurretProj(resp.data.trxs);
       setLoading(false);
       setCount(count + 1);
     } catch (error) {
       console.log(error.message);
+      setLoading(false);
     }
   };
 
-  React.useEffect(() => {}, [currentProj, loading, count]);
+  useEffect(() => {}, [currentProj, loading, count]);
 
   return (
     <React.Fragment>
