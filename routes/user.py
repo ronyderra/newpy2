@@ -6,10 +6,8 @@ from bson import ObjectId
 import userTrxs
 user = APIRouter()
 
-
 def getHash(n):
     return n["hash"]
-
 
 @user.get('/trx/{address}')
 async def getUser(address):
